@@ -27,7 +27,8 @@
 
           <!-- CREATE SHIFT -->
           <div v-if="!loading" class="flex justify-center">
-            <router-link class="
+            <router-link
+              class="
                 my-2
                 inline-block
                 px-6
@@ -49,7 +50,10 @@
                 transition
                 duration-150
                 ease-in-out
-              " to="/create">Create Shift</router-link>
+              "
+              to="/create"
+              >Create Shift</router-link
+            >
           </div>
           <!-- CREATE SHIFT -->
           <div v-if="!loading" class="flex justify-center">
@@ -820,6 +824,12 @@
                 </tr>
               </tbody>
             </table>
+            <pagination
+              :totalPages="totalPages"
+              :perPage="perPage"
+              :currentPage="currentPage"
+              @pagechanged="onPageChange"
+            />
           </div>
           <!-- SHIFTS DATA -->
         </div>
@@ -828,9 +838,17 @@
   </div>
 </template>
 <script>
+import Pagination from "./components/Pagination.vue";
 export default {
+  components: {
+    Pagination,
+  },
   data() {
     return {
+      totalRecords: 0,
+      totalPages: 10,
+      perPage: 10,
+      currentPage: 1,
       editing: [],
       edit_data: [],
       loading: false,
@@ -847,10 +865,30 @@ export default {
     this.getData();
   },
   methods: {
+    onPageChange(page) {
+      console.log("PAGE :::>");
+      console.log(page);
+      this.currentPage = page;
+      return axios
+        .get("api/shifts", {
+          params: {
+            page: this.currentPage,
+            size: this.perPage,
+          },
+        })
+        .then((response) => {
+          this.employees = response.data.employee;
+          this.shifts = response.data.shifts;
+          this.totalRecords = response.data.total;
+          this.totalPages = Math.ceil(response.data.total / this.perPage);
+        });
+    },
     getData() {
       return axios.get("api/shifts").then((response) => {
         this.employees = response.data.employee;
         this.shifts = response.data.shifts;
+        this.totalRecords = response.data.total;
+        this.totalPages = Math.ceil(response.data.total / this.perPage);
       });
     },
     getShiftData(shift_id) {
