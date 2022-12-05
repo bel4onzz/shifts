@@ -29,15 +29,28 @@ class ShiftController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // dd("SHIFTS", $request->all());
         $employee = Shift::select('employee')
             ->groupBy('employee')
             ->get();
-        $shifts = Shift::take(5)->get();
+
+        $page = 1;
+        if(array_key_exists('page', $request->all())){
+            $page = $request['page'];
+        }
+        $size = 10;
+        if(array_key_exists('size', $request->all())){
+            $size = $request['size'];
+        }
+
+        $shifts = Shift::skip(($page - 1)*$size)->take($size)->get();
+
         return response()->json([
             'employee' => $employee,
-            'shifts' => $shifts
+            'shifts' => $shifts,
+            'total' => Shift::all()->count()
         ]);
     }
 
