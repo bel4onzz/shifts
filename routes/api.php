@@ -21,4 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('employee', [ShiftController::class, 'employee']);
 Route::get('shifts/truncate', [ShiftController::class, 'truncate']);
+Route::get('shift-types', [ShiftController::class, 'get_shift_types']);
+Route::get('shift-statuses', [ShiftController::class, 'get_shift_statuses']);
 Route::resource('shifts', ShiftController::class);

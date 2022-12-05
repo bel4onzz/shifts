@@ -26,7 +26,7 @@
           </h1>
 
           <!-- CREATE SHIFT -->
-          <div class="flex justify-center">
+          <div v-if="!loading" class="flex justify-center">
             <router-link class="
                 my-2
                 inline-block
@@ -52,7 +52,7 @@
               " to="/create">Create Shift</router-link>
           </div>
           <!-- CREATE SHIFT -->
-          <div class="flex justify-center">
+          <div v-if="!loading" class="flex justify-center">
             <h2>OR</h2>
           </div>
           <!-- UPLOAD CSV INPUT -->

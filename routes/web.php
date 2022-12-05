@@ -19,3 +19,7 @@ Route::get('/', function () {
 });
 Route::get('import', [ShiftController::class, 'import']);
 Route::post('upload', [ShiftController::class, 'upload']);
+
+Route::get('/{any}', function () {
+    return view('welcome');
+})->where('any', '.*');

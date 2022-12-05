@@ -1,7 +1,24 @@
 <template>
   <div class="block p-6 rounded-lg bg-white w-4/5 m-auto">
     <h1 class="mb-4">Create Shift</h1>
-    <div>
+    <div v-if="loading" class="flex justify-center items-center">
+      <div
+        class="
+          spinner-border
+          animate-spin
+          inline-block
+          w-8
+          h-8
+          border-4
+          rounded-full
+        "
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div v-else>
       <div class="form-group mb-6">
         <input
           type="date"
@@ -172,7 +189,7 @@
           aria-label="Default select example"
         >
           <option
-            v-for="shift_type in shift_types"
+            v-for="shift_type in types"
             :key="shift_type.shift_type"
             :value="shift_type.shift_type"
           >
@@ -208,10 +225,11 @@
         />
       </div>
       <div class="form-group mb-6">
-        <input
+        <select
           v-model="request.status"
           class="
-            form-control
+            form-select
+            appearance-none
             block
             w-full
             px-3
@@ -219,7 +237,7 @@
             text-base
             font-normal
             text-gray-700
-            bg-white bg-clip-padding
+            bg-white bg-clip-padding bg-no-repeat
             border border-solid border-gray-300
             rounded
             transition
@@ -230,9 +248,16 @@
             focus:border-blue-600
             focus:outline-none
           "
-          id="exampleInput126"
-          placeholder="Status"
-        />
+          aria-label="Default select example"
+        >
+          <option
+            v-for="shift_status in statuses"
+            :key="shift_status.status"
+            :value="shift_status.status"
+          >
+            {{ shift_status.status }}
+          </option>
+        </select>
       </div>
       <div class="form-group mb-6">
         <Datepicker v-model="request.paid_at"></Datepicker>
@@ -272,8 +297,15 @@ import "@vuepic/vue-datepicker/dist/main.css";
 
 export default {
   components: { Datepicker },
+  created() {
+    this.getShiftTypes();
+    this.getShiftStatuses();
+  },
   data() {
     return {
+      loading: true,
+      statuses: [],
+      types: [],
       request: {
         date: null,
         employee: null,
@@ -289,10 +321,24 @@ export default {
   },
 
   methods: {
-    getShiftTypes(){},
-    getShiftStatuses(){},
+    getShiftTypes() {
+      return axios.get("api/shift-types", this.request).then((response) => {
+        console.log("TYPES RESPONSE");
+        console.log(response);
+        this.types = response.data;
+        this.loading = false;
+      });
+    },
+    getShiftStatuses() {
+      return axios.get("api/shift-statuses").then((response) => {
+        console.log("STATUSES RESPONSE");
+        console.log(response);
+        this.statuses = response.data;
+        this.loading = false;
+      });
+    },
     createShift() {
-      console.log("HELLOWORLD");
+      this.loading = true;
       return axios.post("api/shifts", this.request).then((response) => {
         this.employees = response.data;
         this.loading = false;

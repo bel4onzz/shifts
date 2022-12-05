@@ -19,7 +19,6 @@ class ShiftController extends Controller
     // }
     public function upload(Request $request)
     {
-        // dd("HellWorld", $request->file(), $request);
         Excel::import(new ShiftsImport, $request->file);
         return Shift::select('employee')
             ->groupBy('employee')
@@ -73,8 +72,8 @@ class ShiftController extends Controller
     public function show(Shift $shift)
     {
         //
-        $get_shift_types = Shift::select('shift_type')->groupBy('shift_type')->get();
-        $get_shift_statuses = Shift::select('status')->groupBy('status')->get();
+        $get_shift_types = $this->get_shift_types();
+        $get_shift_statuses = $this->get_shift_statuses();
 
         $response = [
             'shift_types' => $get_shift_types,
@@ -82,6 +81,14 @@ class ShiftController extends Controller
             'shift' => $shift,
         ];
         return $response;
+    }
+    public function get_shift_types()
+    {
+        return Shift::select('shift_type')->groupBy('shift_type')->get();
+    }
+    public function get_shift_statuses()
+    {
+        return Shift::select('status')->groupBy('status')->get();
     }
 
     /**
