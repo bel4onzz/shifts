@@ -59,6 +59,7 @@
         <li class="page-item" v-for="page in pages" :key="page.name">
           <a
             @click="onClickNumbers(page.name)"
+            :class="[page.name == currentPage ? 'bg-blue-400' : '']"
             class="
               page-link
               relative
@@ -202,19 +203,25 @@ export default {
 
   methods: {
     onClickNumbers(page) {
-      this.$emit("pagechanged", page);
+      if (this.currentPage) {
+        this.$emit("pagechanged", page);
+      }
     },
     onClickFirstPage() {
       this.$emit("pagechanged", 1);
     },
     onClickPreviousPage() {
-      this.$emit("pagechanged", this.currentPage - 1);
+      if (this.currentPage > 1) {
+        this.$emit("pagechanged", this.currentPage - 1);
+      }
     },
     onClickPage(page) {
       this.$emit("pagechanged", page);
     },
     onClickNextPage() {
-      this.$emit("pagechanged", this.currentPage + 1);
+      if (this.totalPages >= this.currentPage + 1) {
+        this.$emit("pagechanged", this.currentPage + 1);
+      }
     },
     onClickLastPage() {
       this.$emit("pagechanged", this.totalPages);

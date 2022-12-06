@@ -245,9 +245,66 @@
           <!-- EMPLOYEES DATA -->
 
           <!-- SHIFTS DATA -->
-          <div v-if="shifts.length && !show_employees">
-            <h3>Shifts</h3>
-            <table class="w-full">
+          <div>
+            <div v-if="!show_employees">
+              <h3>Shifts | TotalRecords: {{ totalRecords }}</h3>
+              <!-- SEARCH INPUT -->
+              <div class="flex justify-start">
+                <input
+                  type="number"
+                  v-model="search_total_pay"
+                  class="
+                    form-control
+                    block
+                    w-1/2
+                    px-3
+                    py-1.5
+                    text-base
+                    font-normal
+                    text-gray-700
+                    bg-white bg-clip-padding
+                    border border-solid border-gray-300
+                    rounded
+                    transition
+                    ease-in-out
+                    m-0
+                    focus:text-gray-700
+                    focus:bg-white
+                    focus:border-blue-600
+                    focus:outline-none
+                  "
+                />
+                <button
+                  @click="handleSearch"
+                  class="
+                    inline-block
+                    px-6
+                    py-2.5
+                    bg-blue-600
+                    text-white
+                    font-medium
+                    text-xs
+                    leading-tight
+                    uppercase
+                    rounded
+                    shadow-md
+                    hover:bg-blue-700 hover:shadow-lg
+                    focus:bg-blue-700
+                    focus:shadow-lg
+                    focus:outline-none
+                    focus:ring-0
+                    active:bg-blue-800 active:shadow-lg
+                    transition
+                    duration-150
+                    ease-in-out
+                  "
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+            <!-- SEARCH INPUT -->
+            <table v-if="shifts.length && !show_employees" class="w-full">
               <thead class="bg-white border-b">
                 <tr>
                   <th
@@ -825,6 +882,9 @@
               </tbody>
             </table>
             <pagination
+              v-if="shifts.length && !show_employees"
+              class="mt-4"
+              :maxVisibleButtons="totalPages > 5 ? 5 : totalPages"
               :totalPages="totalPages"
               :perPage="perPage"
               :currentPage="currentPage"
@@ -849,6 +909,7 @@ export default {
       totalPages: 10,
       perPage: 10,
       currentPage: 1,
+      search_total_pay: "",
       editing: [],
       edit_data: [],
       loading: false,
@@ -866,14 +927,31 @@ export default {
   },
   methods: {
     onPageChange(page) {
-      console.log("PAGE :::>");
-      console.log(page);
       this.currentPage = page;
+      if (page >= 1) {
+        return axios
+          .get("api/shifts", {
+            params: {
+              page: this.currentPage,
+              size: this.perPage,
+              search_query: this.search_total_pay,
+            },
+          })
+          .then((response) => {
+            this.employees = response.data.employee;
+            this.shifts = response.data.shifts;
+            this.totalRecords = response.data.total;
+            this.totalPages = Math.ceil(response.data.total / this.perPage);
+          });
+      }
+    },
+    handleSearch() {
       return axios
         .get("api/shifts", {
           params: {
             page: this.currentPage,
             size: this.perPage,
+            search_query: this.search_total_pay,
           },
         })
         .then((response) => {

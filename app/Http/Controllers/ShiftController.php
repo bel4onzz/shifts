@@ -45,12 +45,18 @@ class ShiftController extends Controller
             $size = $request['size'];
         }
 
-        $shifts = Shift::skip(($page - 1)*$size)->take($size)->get();
+        $shifts = new Shift;
+        if(array_key_exists('search_query', $request->all())){
+            $shifts = $shifts->select("*", DB::raw('(SUBSTRING(rate_per_hours,2) * hours) as total_pay'))->having('total_pay', '>',(int) $request['search_query']);
+        }
+
+        $total_records = $shifts->count();
+        $shifts = $shifts->skip(($page - 1)*$size)->take($size);
 
         return response()->json([
             'employee' => $employee,
-            'shifts' => $shifts,
-            'total' => Shift::all()->count()
+            'shifts' => $shifts->get(),
+            'total' => $total_records
         ]);
     }
 
