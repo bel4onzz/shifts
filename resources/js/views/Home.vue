@@ -465,9 +465,10 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="payments in shifts"
+                  v-for="(payments, key) in shifts"
                   :key="payments.id"
-                  class="bg-gray-100 border-b"
+                  :class="[!(key%2) ? 'bg-gray-100' : '']"
+                  class="border-b"
                 >
                   <td
                     class="
@@ -884,7 +885,7 @@
             <pagination
               v-if="shifts.length && !show_employees"
               class="mt-4"
-              :maxVisibleButtons="totalPages > 5 ? 5 : totalPages"
+              :maxVisibleButtons="totalPages >= 5 ? 5 : totalPages"
               :totalPages="totalPages"
               :perPage="perPage"
               :currentPage="currentPage"
@@ -949,7 +950,7 @@ export default {
       return axios
         .get("api/shifts", {
           params: {
-            page: this.currentPage,
+            page: 1,
             size: this.perPage,
             search_query: this.search_total_pay,
           },

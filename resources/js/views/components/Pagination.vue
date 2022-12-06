@@ -188,13 +188,15 @@ export default {
       for (
         let i = this.startPage;
         i <=
-        Math.min(this.startPage + this.maxVisibleButtons - 1, this.totalPages);
+        Math.min(this.startPage + this.maxVisibleButtons, this.totalPages);
         i++
       ) {
-        range.push({
-          name: i,
-          isDisabled: i === this.currentPage,
-        });
+        if (i >= 1 && i<= this.totalPages) {
+          range.push({
+            name: i,
+            isDisabled: i === this.currentPage,
+          });
+        }
       }
 
       return range;

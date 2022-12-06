@@ -323,16 +323,12 @@ export default {
   methods: {
     getShiftTypes() {
       return axios.get("api/shift-types", this.request).then((response) => {
-        console.log("TYPES RESPONSE");
-        console.log(response);
         this.types = response.data;
         this.loading = false;
       });
     },
     getShiftStatuses() {
       return axios.get("api/shift-statuses").then((response) => {
-        console.log("STATUSES RESPONSE");
-        console.log(response);
         this.statuses = response.data;
         this.loading = false;
       });

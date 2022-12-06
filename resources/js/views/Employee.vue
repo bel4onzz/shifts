@@ -61,7 +61,7 @@
                       text-left
                     "
                   >
-                  Employer
+                    Employer
                   </th>
                   <th
                     scope="col"
@@ -74,7 +74,7 @@
                       text-left
                     "
                   >
-                  Hours
+                    Hours
                   </th>
                   <th
                     scope="col"
@@ -87,7 +87,7 @@
                       text-left
                     "
                   >
-                  Rate per Hours
+                    Rate per Hours
                   </th>
                   <th
                     scope="col"
@@ -100,7 +100,7 @@
                       text-left
                     "
                   >
-                  Shift Type
+                    Shift Type
                   </th>
                   <th
                     scope="col"
@@ -113,7 +113,7 @@
                       text-left
                     "
                   >
-                  Taxable
+                    Taxable
                   </th>
                   <th
                     scope="col"
@@ -126,7 +126,7 @@
                       text-left
                     "
                   >
-                  Status
+                    Status
                   </th>
                   <th
                     scope="col"
@@ -139,12 +139,17 @@
                       text-left
                     "
                   >
-                  Paid At
+                    Paid At
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="payments in employee.last_completed_payments" :key="payments.id" class="bg-gray-100 border-b">
+                <tr
+                  v-for="(payments, key) in employee.last_completed_payments"
+                  :key="payments.id"
+                  :class="[!(key%2) ? 'bg-gray-100' : '']"
+                  class="border-b"
+                >
                   <td
                     class="
                       px-6
@@ -155,52 +160,7 @@
                       text-gray-900
                     "
                   >
-                    {{payments.id}}
-                  </td>
-                  <td
-                    class="
-                      px-6
-                      py-4
-                      whitespace-nowrap
-                      text-sm
-                      font-medium
-                      text-gray-900
-                    "
-                  >
-                    {{payments.date}}
-                  </td>
-                  <td
-                    class="
-                      text-sm text-gray-900
-                      font-light
-                      px-6
-                      py-4
-                      whitespace-nowrap
-                    "
-                  >
-                  {{payments.employee}}
-                  </td>
-                  <td
-                    class="
-                      text-sm text-gray-900
-                      font-light
-                      px-6
-                      py-4
-                      whitespace-nowrap
-                    "
-                  >
-                  {{payments.employer}}
-                  </td>
-                  <td
-                    class="
-                      text-sm text-gray-900
-                      font-light
-                      px-6
-                      py-4
-                      whitespace-nowrap
-                    "
-                  >
-                  {{payments.hours}}
+                    {{ payments.id }}
                   </td>
                   <td
                     class="
@@ -212,7 +172,7 @@
                       text-gray-900
                     "
                   >
-                  {{payments.rate_per_hours}}
+                    {{ payments.date }}
                   </td>
                   <td
                     class="
@@ -223,7 +183,7 @@
                       whitespace-nowrap
                     "
                   >
-                  {{payments.shift_type}}
+                    {{ payments.employee }}
                   </td>
                   <td
                     class="
@@ -234,7 +194,7 @@
                       whitespace-nowrap
                     "
                   >
-                  {{payments.taxable}}
+                    {{ payments.employer }}
                   </td>
                   <td
                     class="
@@ -245,7 +205,19 @@
                       whitespace-nowrap
                     "
                   >
-                  {{payments.status}}
+                    {{ payments.hours }}
+                  </td>
+                  <td
+                    class="
+                      px-6
+                      py-4
+                      whitespace-nowrap
+                      text-sm
+                      font-medium
+                      text-gray-900
+                    "
+                  >
+                    {{ payments.rate_per_hours }}
                   </td>
                   <td
                     class="
@@ -256,10 +228,42 @@
                       whitespace-nowrap
                     "
                   >
-                  {{payments.paid_at}}
+                    {{ payments.shift_type }}
+                  </td>
+                  <td
+                    class="
+                      text-sm text-gray-900
+                      font-light
+                      px-6
+                      py-4
+                      whitespace-nowrap
+                    "
+                  >
+                    {{ payments.taxable }}
+                  </td>
+                  <td
+                    class="
+                      text-sm text-gray-900
+                      font-light
+                      px-6
+                      py-4
+                      whitespace-nowrap
+                    "
+                  >
+                    {{ payments.status }}
+                  </td>
+                  <td
+                    class="
+                      text-sm text-gray-900
+                      font-light
+                      px-6
+                      py-4
+                      whitespace-nowrap
+                    "
+                  >
+                    {{ payments.paid_at }}
                   </td>
                 </tr>
-
               </tbody>
             </table>
           </div>
