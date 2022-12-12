@@ -260,7 +260,7 @@
         </select>
       </div>
       <div class="form-group mb-6">
-        <Datepicker v-model="request.paid_at"></Datepicker>
+        <Datepicker :format="'yyyy-MM-dd hh:mm'" v-model="request.paid_at"></Datepicker>
       </div>
       <button
         type="submit"
